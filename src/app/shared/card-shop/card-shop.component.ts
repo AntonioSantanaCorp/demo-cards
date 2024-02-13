@@ -16,7 +16,7 @@ import { Product } from '../../core/models';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <mat-card style="height: 100%;display:grid">
+    <mat-card style="height: 100%;display:grid;gap:5px">
       <mat-card-header>
         <mat-card-title>{{ product?.title }}</mat-card-title>
       </mat-card-header>
@@ -26,7 +26,7 @@ import { Product } from '../../core/models';
         <p>
           {{ product?.description }}
         </p>
-        <mat-chip readonly> {{ product?.category }}</mat-chip>
+        <mat-chip color="primary"> {{ product?.category }}</mat-chip>
 
         <p>Rating: {{ product?.rating?.rate }}</p>
       </mat-card-content>

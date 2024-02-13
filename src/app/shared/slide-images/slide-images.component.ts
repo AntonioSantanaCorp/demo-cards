@@ -13,11 +13,12 @@ import { MatIconModule } from '@angular/material/icon';
         display: grid;
         justify-content: center;
         align-items: center;
-        grid-template-columns: 1fr 2fr 1fr;
+        grid-template-columns: auto 2fr auto;
       }
 
       .slide-img {
-        height: 150px;
+        height: 110px;
+        width: 100%;
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
       }

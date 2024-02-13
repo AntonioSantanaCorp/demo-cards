@@ -21,7 +21,7 @@ import { of } from 'rxjs';
 })
 export class CardsMemoryListComponent implements OnInit {
   private readonly _memoryService = inject(MemoryService);
-  protected products$ = this._memoryService.productsPerPage$;
+  protected products$ = this._memoryService.products$;
 
   ngOnInit(): void {
     this._memoryService.connect();
