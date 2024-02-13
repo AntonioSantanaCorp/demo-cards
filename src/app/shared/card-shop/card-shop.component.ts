@@ -1,26 +1,34 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { SlideImagesComponent } from '../slide-images/slide-images.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
+import { Product } from '../../core/models';
 
 @Component({
   selector: 'app-card-shop',
   standalone: true,
-  imports: [MatCardModule],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    SlideImagesComponent,
+    MatChipsModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <mat-card>
+    <mat-card style="height: 100%;display:grid">
       <mat-card-header>
-        <mat-card-title>Shiba Inu</mat-card-title>
+        <mat-card-title>{{ product?.title }}</mat-card-title>
       </mat-card-header>
-      <!-- <img
-        mat-card-image
-        src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-        alt="Photo of a Shiba Inu"
-      /> -->
+
+      <app-slide-images mat-card-image [images]="product?.images ?? []" />
       <mat-card-content>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          {{ product?.description }}
         </p>
+        <mat-chip readonly> {{ product?.category }}</mat-chip>
+
+        <p>Rating: {{ product?.rating?.rate }}</p>
       </mat-card-content>
       <mat-card-actions>
         <button mat-button>Add favorite</button>
@@ -28,6 +36,8 @@ import { MatCardModule } from '@angular/material/card';
       </mat-card-actions>
     </mat-card>
   `,
-  styles: ``,
 })
-export class CardShopComponent {}
+export class CardShopComponent {
+  @Input({ required: true })
+  product!: Product | null;
+}
