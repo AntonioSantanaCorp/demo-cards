@@ -55,21 +55,18 @@ export class ProductIDBStore extends StoreService {
 
     if (await db.count('products')) return db.getAll('products', null);
     else {
-      debugger;
       const products = await lastValueFrom(this._getData$);
       const tx = db.transaction('products', 'readwrite');
       const transactions = products.map((product) => tx.store.put(product));
       await Promise.all([...transactions, tx.done]);
 
-      return products;
+      return db.getAll('products');
     }
   }
 
   public override connect(): void {
     this.getData().then((products) => {
       //Fill elements
-      console.log(products);
-      
       this._products.next(products!);
       this._categories.next(
         Array.from(new Set(products!.map(({ category }) => category)))
@@ -95,6 +92,7 @@ export class ProductIDBStore extends StoreService {
   public override async filterByCategories(category?: string | undefined) {
     const db = await this._indexedDB;
     const products = await db.getAllFromIndex('products', 'category', category);
+
     this._products.next(products);
   }
 }

@@ -48,7 +48,7 @@ import { map } from 'rxjs';
     </mat-toolbar>
 
     <section class="list-products">
-      @for (product of products$ | async; track product) {
+      @for (product of products$ | async; track product.id) {
       <app-card-shop [product]="product" />
       }
     </section>
