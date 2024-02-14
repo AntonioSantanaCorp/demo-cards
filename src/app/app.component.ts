@@ -19,16 +19,9 @@ import { CardShopComponent } from './components/card-shop/card-shop.component';
     AsyncPipe,
   ],
   template: `
-    <mat-toolbar
-      color="primary"
-      style="display: flex; justify-content: space-between"
-    >
+    <mat-toolbar color="primary">
       <span>Awazon</span>
-      <button
-        mat-icon-button
-        class="example-icon"
-        aria-label="Example icon-button with menu icon"
-      >
+      <button mat-icon-button>
         <mat-icon>shopping_cart</mat-icon>
       </button>
     </mat-toolbar>

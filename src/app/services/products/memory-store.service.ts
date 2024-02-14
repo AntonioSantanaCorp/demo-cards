@@ -24,7 +24,10 @@ export class MemoryStoreService extends StoreService {
         ),
         takeUntil(this._destroy)
       )
-      .subscribe((results) => this._store.next(results));
+      .subscribe((results) => {
+        this._store.next(results);
+        this._products.next(results);
+      });
   }
 
   public override disconnect(): void {
@@ -53,8 +56,11 @@ export class MemoryStoreService extends StoreService {
   }
 
   public override getCategories(): Observable<string[]> {
+    //create a distinct
     return this._store.pipe(
-      map((products) => products.map(({ category }) => category))
+      map((products) =>
+        Array.from(new Set(products.map(({ category }) => category)))
+      )
     );
   }
 }
