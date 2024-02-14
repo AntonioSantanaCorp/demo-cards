@@ -6,7 +6,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { AsyncPipe } from '@angular/common';
 import { StoreService } from './services/products/store-service';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
-
 @Component({
   selector: 'app-root',
   standalone: true,
