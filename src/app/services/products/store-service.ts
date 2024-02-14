@@ -8,6 +8,8 @@ export abstract class StoreService {
 
   public abstract products$: Observable<Product[]>;
 
+  public abstract categories$: Observable<string[]>;
+
   public abstract connect(): void;
 
   public abstract disconnect(): void;
@@ -15,6 +17,4 @@ export abstract class StoreService {
   public abstract search(text?: string): void;
 
   public abstract filterByCategories(category?: string): void;
-
-  public abstract getCategories(): Observable<string[]>;
 }

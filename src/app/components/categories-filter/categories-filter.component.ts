@@ -1,16 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatChipListboxChange, MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-categories-filter',
   standalone: true,
-  imports: [],
+  imports: [MatChipsModule],
+  styles: [
+    `
+      mat-chip-option {
+        background: transparent !important;
+        border: 0.2px solid lightgray;
+      }
+
+      :host::ng-deep mat-chip-option .mat-mdc-chip-action-label {
+        color: white !important;
+      }
+    `,
+  ],
   template: `
-    <p>
-      categories-filter works!
-    </p>
+    <mat-chip-listbox (change)="selected.emit($event.value)">
+      @for (category of categories; track category) {
+      <mat-chip-option color="accent">{{ category }}</mat-chip-option>
+      }
+    </mat-chip-listbox>
   `,
-  styles: ``
 })
 export class CategoriesFilterComponent {
+  @Input()
+  categories: string[] | null = [];
 
+  @Output()
+  selected = new EventEmitter<string>();
 }

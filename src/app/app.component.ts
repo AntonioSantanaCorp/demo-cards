@@ -7,18 +7,10 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 import { StoreService } from './services/products/store-service';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
 import { SearchInputComponent } from './components/search-input/search-input.component';
+import { CategoriesFilterComponent } from './components/categories-filter/categories-filter.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    CardShopComponent,
-    SearchInputComponent,
-    AsyncPipe,
-  ],
   styles: [
     `
       .toolbar {
@@ -30,6 +22,10 @@ import { SearchInputComponent } from './components/search-input/search-input.com
       }
 
       .toolbar__filter-section {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        gap: 10px;
       }
     `,
   ],
@@ -37,7 +33,11 @@ import { SearchInputComponent } from './components/search-input/search-input.com
     <mat-toolbar class="toolbar" color="primary">
       <span>Awazon</span>
       <section class="toolbar__filter-section">
-        <app-search-input (search)="onSearch($event)"></app-search-input>
+        <app-search-input (search)="onSearch($event)" />
+        <app-categories-filter
+          [categories]="categories$ | async"
+          (selected)="onSelectCategory($event)"
+        />
       </section>
       <span class="toolbar__spacer"></span>
       <button mat-icon-button>
@@ -51,6 +51,16 @@ import { SearchInputComponent } from './components/search-input/search-input.com
       }
     </section>
   `,
+  imports: [
+    RouterOutlet,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    CardShopComponent,
+    SearchInputComponent,
+    AsyncPipe,
+    CategoriesFilterComponent,
+  ],
 })
 export class AppComponent implements OnInit {
   @Output()
@@ -58,11 +68,17 @@ export class AppComponent implements OnInit {
 
   protected products$ = this._storeService.products$;
 
+  protected categories$ = this._storeService.categories$;
+
   ngOnInit(): void {
     this._storeService.connect();
   }
 
   onSearch(text: string) {
     this._storeService.search(text);
+  }
+
+  onSelectCategory(category: string) {
+    this._storeService.filterByCategories(category);
   }
 }

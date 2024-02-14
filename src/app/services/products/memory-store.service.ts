@@ -10,9 +10,13 @@ export class MemoryStoreService extends StoreService {
 
   private readonly _products = new BehaviorSubject<Product[]>([]);
 
+  private readonly _categories = new BehaviorSubject<string[]>([]);
+
   private readonly _destroy = new Subject<void>();
 
   public override products$ = this._products.asObservable();
+
+  public override categories$ = this._categories.asObservable();
 
   public connect() {
     this._httpService
@@ -27,6 +31,9 @@ export class MemoryStoreService extends StoreService {
       .subscribe((results) => {
         this._store.next(results);
         this._products.next(results);
+        this._categories.next(
+          Array.from(new Set(results.map(({ category }) => category)))
+        );
       });
   }
 
@@ -53,14 +60,5 @@ export class MemoryStoreService extends StoreService {
       );
 
     this._products.next(products);
-  }
-
-  public override getCategories(): Observable<string[]> {
-    //create a distinct
-    return this._store.pipe(
-      map((products) =>
-        Array.from(new Set(products.map(({ category }) => category)))
-      )
-    );
   }
 }
