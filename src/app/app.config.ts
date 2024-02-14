@@ -4,8 +4,8 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
-import { StoreService } from './services/store-service';
-import { MemoryStoreService } from './services/memory-store.service';
+import { StoreService } from './services/products/store-service';
+import { MemoryStoreService } from './services/products/memory-store.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

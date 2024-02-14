@@ -3,10 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { CardShopComponent } from './shared/card-shop/card-shop.component';
 import { AsyncPipe } from '@angular/common';
-import { MemoryStoreService } from './services/memory-store.service';
-import { StoreService } from './services/store-service';
+import { StoreService } from './services/products/store-service';
+import { CardShopComponent } from './components/card-shop/card-shop.component';
 
 @Component({
   selector: 'app-root',
@@ -35,16 +34,16 @@ import { StoreService } from './services/store-service';
     </mat-toolbar>
 
     <section class="list-products">
-      <!-- @for (product of products$ | async; track product) {
+      @for (product of products$ | async; track product) {
       <app-card-shop [product]="product"></app-card-shop>
-      } -->
+      }
     </section>
   `,
 })
 export class AppComponent implements OnInit {
   private readonly _storeService = inject(StoreService);
 
-  // protected products$ = this._storeService.products$;
+  protected products$ = this._storeService.products$;
 
   ngOnInit(): void {
     this._storeService.connect();
