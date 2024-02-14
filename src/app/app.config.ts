@@ -6,12 +6,13 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideHttpClient } from '@angular/common/http';
 import { StoreService } from './services/products/store-service';
 import { MemoryStoreService } from './services/products/memory-store.service';
+import { ProductIDBStore } from './services/products/indexeddb-store.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(),
-    { provide: StoreService, useFactory: () => new MemoryStoreService() },
+    { provide: StoreService, useFactory: () => new ProductIDBStore() },
   ],
 };

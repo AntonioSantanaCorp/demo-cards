@@ -1,3 +1,5 @@
+import { DBSchema } from 'idb';
+
 export type ProductRating = {
   rate: string;
   count: number;
@@ -12,3 +14,15 @@ export type Product = {
   images: string[];
   rating: ProductRating;
 };
+
+export interface AwazonDB extends DBSchema {
+  products: {
+    key: number;
+    value: Product;
+    indexes: { category: string; name: string };
+  };
+  cartList: {
+    key: number;
+    value: Product;
+  };
+}

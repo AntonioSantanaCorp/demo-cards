@@ -18,9 +18,12 @@ export class MemoryStoreService extends StoreService {
 
   public override categories$ = this._categories.asObservable();
 
+  constructor() {
+    super();
+  }
+
   public connect() {
-    this._httpService
-      .getProducts()
+    this._getData$
       .pipe(
         //Add autoincrement manual
         map((results) =>

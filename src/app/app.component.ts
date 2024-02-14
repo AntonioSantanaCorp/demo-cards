@@ -71,7 +71,9 @@ export class AppComponent implements OnInit {
   protected categories$ = this._storeService.categories$;
 
   ngOnInit(): void {
+    console.time('fetchData');
     this._storeService.connect();
+    console.timeEnd('fetchData');
   }
 
   onSearch(text: string) {
