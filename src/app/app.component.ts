@@ -3,11 +3,13 @@ import { RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
+import { MatBadgeModule } from '@angular/material/badge';
 import { StoreService } from './services/products/store-service';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
 import { SearchInputComponent } from './components/search-input/search-input.component';
 import { CategoriesFilterComponent } from './components/categories-filter/categories-filter.component';
+import { map } from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -31,7 +33,7 @@ import { CategoriesFilterComponent } from './components/categories-filter/catego
   ],
   template: `
     <mat-toolbar class="toolbar" color="primary">
-      <span>Awazon</span>
+      <span>Awazon {{ amount$ | async }} </span>
       <section class="toolbar__filter-section">
         <app-search-input (search)="onSearch($event)" />
         <app-categories-filter
@@ -59,6 +61,7 @@ import { CategoriesFilterComponent } from './components/categories-filter/catego
     CardShopComponent,
     SearchInputComponent,
     AsyncPipe,
+    MatBadgeModule,
     CategoriesFilterComponent,
   ],
 })
@@ -67,6 +70,8 @@ export class AppComponent implements OnInit {
   public readonly _storeService = inject(StoreService);
 
   protected products$ = this._storeService.products$;
+
+  protected amount$ = this.products$.pipe(map(({ length }) => length));
 
   protected categories$ = this._storeService.categories$;
 
@@ -77,10 +82,14 @@ export class AppComponent implements OnInit {
   }
 
   onSearch(text: string) {
+    console.time('filterText');
     this._storeService.search(text);
+    console.time('filterText');
   }
 
   onSelectCategory(category: string) {
+    console.time('filterCategory');
     this._storeService.filterByCategories(category);
+    console.timeEnd('filterCategory');
   }
 }

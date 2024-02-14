@@ -33,12 +33,13 @@ export class ProductIDBStore extends StoreService {
         if (!db.objectStoreNames.contains('products')) {
           //create "table"
           const objectStore = db.createObjectStore('products', {
+            keyPath: 'id',
             autoIncrement: true,
           });
 
           //create index
-          objectStore.createIndex('category', 'category');
-          objectStore.createIndex('name', 'name');
+          objectStore.createIndex('category', 'category', { unique: false });
+          objectStore.createIndex('title', 'title', { unique: false });
         }
 
         if (!db.objectStoreNames.contains('cartList')) {
@@ -52,24 +53,23 @@ export class ProductIDBStore extends StoreService {
   private async getData() {
     const db = await this._indexedDB;
 
-    if (await db.count('products')) return db.getAll('products');
-    else
-      return lastValueFrom(
-        this._getData$.pipe(
-          tap(async (products) => {
-            const tx = db.transaction('products', 'readwrite');
-            const transactions = products.map((product) =>
-              tx.store.put(product)
-            );
-            await Promise.all([...transactions, tx.done]);
-          })
-        )
-      );
+    if (await db.count('products')) return db.getAll('products', null);
+    else {
+      debugger;
+      const products = await lastValueFrom(this._getData$);
+      const tx = db.transaction('products', 'readwrite');
+      const transactions = products.map((product) => tx.store.put(product));
+      await Promise.all([...transactions, tx.done]);
+
+      return products;
+    }
   }
 
   public override connect(): void {
     this.getData().then((products) => {
       //Fill elements
+      console.log(products);
+      
       this._products.next(products!);
       this._categories.next(
         Array.from(new Set(products!.map(({ category }) => category)))
@@ -88,11 +88,13 @@ export class ProductIDBStore extends StoreService {
     });
   }
 
-  public override search(text?: string | undefined): void {
-    // this.
+  public override async search(text?: string | undefined) {
+    //  const db =await this.
   }
 
-  public override filterByCategories(category?: string | undefined): void {
-    throw new Error('Method not implemented.');
+  public override async filterByCategories(category?: string | undefined) {
+    const db = await this._indexedDB;
+    const products = await db.getAllFromIndex('products', 'category', category);
+    this._products.next(products);
   }
 }

@@ -36,7 +36,7 @@ import { MatIconModule } from '@angular/material/icon';
   ],
   template: `
     <mat-icon>search</mat-icon>
-    <input #input (keydown)="search.emit(input.value)" type="text" />
+    <input #input (input)="search.emit(input.value)" type="text" />
     <mat-icon
       (click)="clearSearch(input)"
       class="clear-btn"

@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { MIN_IMAGE_INDEX } from '../../core/constants';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-slide-images',
@@ -29,7 +30,7 @@ import { MatIconModule } from '@angular/material/icon';
       <button (click)="goBack()" mat-icon-button>
         <mat-icon>navigate_before</mat-icon>
       </button>
-      <img class="slide-img" [src]="images[index]" alt="image" />
+      <img class="slide-img" loading="lazy" [src]="images[index]" alt="image" />
       <button (click)="goNext()" mat-icon-button>
         <mat-icon>navigate_next</mat-icon>
       </button>

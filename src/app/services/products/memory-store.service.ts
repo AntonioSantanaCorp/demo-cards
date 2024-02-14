@@ -27,7 +27,7 @@ export class MemoryStoreService extends StoreService {
       .pipe(
         //Add autoincrement manual
         map((results) =>
-          results.map((product, index) => ({ ...product, id: index + 1 }))
+          results.map((product, index) => ({ ...product, id: (index + 1).toString() }))
         ),
         takeUntil(this._destroy)
       )

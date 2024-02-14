@@ -6,7 +6,7 @@ export type ProductRating = {
 };
 
 export type Product = {
-  id: number;
+  id: string;
   title: string;
   price: string;
   description: string;
@@ -17,9 +17,9 @@ export type Product = {
 
 export interface AwazonDB extends DBSchema {
   products: {
-    key: number;
+    key: string;
     value: Product;
-    indexes: { category: string; name: string };
+    indexes: { category: string; title: string };
   };
   cartList: {
     key: number;
