@@ -22,7 +22,8 @@ export interface AwazonDB extends DBSchema {
     indexes: { category: string; title: string };
   };
   cartList: {
-    key: number;
+    key: string;
     value: Product;
+    indexes: { id: string };
   };
 }

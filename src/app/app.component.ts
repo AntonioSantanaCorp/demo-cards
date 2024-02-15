@@ -1,4 +1,10 @@
-import { Component, OnInit, Output, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,10 +15,27 @@ import { StoreService } from './services/products/store-service';
 import { CardShopComponent } from './components/card-shop/card-shop.component';
 import { SearchInputComponent } from './components/search-input/search-input.component';
 import { CategoriesFilterComponent } from './components/categories-filter/categories-filter.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { map } from 'rxjs';
+import { CartListModalComponent } from './components/cart-list-modal/cart-list-modal.component';
+import { CartStoreService } from './services/cart/cart-store.service';
+import { Product } from './core/models';
+
 @Component({
   selector: 'app-root',
   standalone: true,
+  imports: [
+    RouterOutlet,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    CardShopComponent,
+    SearchInputComponent,
+    AsyncPipe,
+    MatBadgeModule,
+    CategoriesFilterComponent,
+    MatDialogModule,
+  ],
   styles: [
     `
       .toolbar {
@@ -42,54 +65,62 @@ import { map } from 'rxjs';
         />
       </section>
       <span class="toolbar__spacer"></span>
-      <button mat-icon-button>
-        <mat-icon>shopping_cart</mat-icon>
+      <button (click)="openCartListDialog()" mat-icon-button>
+        <mat-icon [matBadge]="cartListAmount$ | async" matBadgeColor="accent">
+          shopping_cart
+        </mat-icon>
       </button>
     </mat-toolbar>
 
     <section class="list-products">
       @for (product of products$ | async; track product.id) {
-      <app-card-shop [product]="product" />
+      <app-card-shop (buyProduct)="onBuyItem($event)" [product]="product" />
       }
     </section>
   `,
-  imports: [
-    RouterOutlet,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    CardShopComponent,
-    SearchInputComponent,
-    AsyncPipe,
-    MatBadgeModule,
-    CategoriesFilterComponent,
-  ],
 })
 export class AppComponent implements OnInit {
-  @Output()
-  public readonly _storeService = inject(StoreService);
+  public readonly _productsStore = inject(StoreService);
 
-  protected products$ = this._storeService.products$;
+  public readonly _cartListStore = inject(CartStoreService);
 
-  protected amount$ = this.products$.pipe(map(({ length }) => length));
+  private readonly _matDialog = inject(MatDialog);
 
-  protected categories$ = this._storeService.categories$;
+  protected readonly products$ = this._productsStore.products$;
+
+  protected readonly amount$ = this.products$.pipe(map(({ length }) => length));
+
+  protected readonly categories$ = this._productsStore.categories$;
+
+  protected readonly cartListAmount$ = this._cartListStore.cartListAmount$;
 
   ngOnInit(): void {
     console.time('fetchData');
-    this._storeService.connect();
+    this._productsStore.connect();
     console.timeEnd('fetchData');
   }
 
   onSearch(text: string) {
     console.time('filterText');
-    this._storeService.search(text);
+    this._productsStore.search(text);
     console.time('filterText');
   }
 
   onSelectCategory(category: string) {
     console.time('filterCategory');
-    this._storeService.filterByCategories(category);
+    this._productsStore.filterByCategories(category);
     console.timeEnd('filterCategory');
+  }
+
+  async openCartListDialog() {
+    const cartListItems = await this._cartListStore.getProducts();
+    
+    this._matDialog.open(CartListModalComponent, {
+      data: cartListItems,
+    });
+  }
+
+  onBuyItem(product: Product) {
+    this._cartListStore.addToCart(product);
   }
 }

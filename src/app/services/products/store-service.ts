@@ -4,15 +4,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Product } from '../../core/models';
 
 export abstract class StoreService {
-  protected readonly _getData$: Observable<Product[]>;
+  protected readonly _getData$ = inject(HttpService).getProducts();
 
   public abstract products$: Observable<Product[]>;
 
   public abstract categories$: Observable<string[]>;
-
-  constructor() {
-    this._getData$ = inject(HttpService).getProducts();
-  }
 
   public abstract connect(): void;
 

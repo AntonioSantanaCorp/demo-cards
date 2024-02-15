@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  Output,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { SlideImagesComponent } from '../slide-images/slide-images.component';
@@ -27,7 +28,7 @@ import { CurrencyPipe } from '@angular/common';
       <mat-card-header>
         <mat-card-title>{{ product?.title }}</mat-card-title>
       </mat-card-header>
-      <app-slide-images mat-card-image [images]="product?.images ?? []" />
+      <app-slide-images mat-card-image [images]="this.product?.images ?? []" />
       <mat-card-content>
         <p>{{ product?.description }}</p>
         <mat-chip color="primary"> {{ product?.category }}</mat-chip>
@@ -35,7 +36,11 @@ import { CurrencyPipe } from '@angular/common';
         <p>Price: {{ product?.price | currency }}</p>
       </mat-card-content>
       <mat-card-actions align="end">
-        <button mat-raised-button color="primary" (click)="buyProduct.emit(product!)">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="buyProduct.emit(product!)"
+        >
           Buy
         </button>
       </mat-card-actions>
@@ -46,5 +51,6 @@ export class CardShopComponent {
   @Input({ required: true })
   product!: Product | null;
 
+  @Output()
   public readonly buyProduct = new EventEmitter<Product>();
 }

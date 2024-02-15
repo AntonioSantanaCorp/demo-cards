@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, inject } from '@angular/core';
 import { StoreService } from './store-service';
 import {
   Observable,
@@ -11,10 +11,11 @@ import {
 } from 'rxjs';
 import { AwazonDB, Product } from '../../core/models';
 import { IDBPDatabase, openDB } from 'idb';
+import { INDEXED_DATABASE } from '../../core/tokens';
 
 @Injectable()
 export class ProductIDBStore extends StoreService {
-  private readonly _indexedDB: Promise<IDBPDatabase<AwazonDB>>;
+  private readonly _indexedDB = inject(INDEXED_DATABASE);
 
   private readonly _products = new Subject<Product[]>();
 
@@ -25,30 +26,6 @@ export class ProductIDBStore extends StoreService {
   public override products$ = this._products.asObservable();
 
   public override categories$ = this._categories.asObservable();
-
-  constructor() {
-    super();
-    this._indexedDB = openDB<AwazonDB>('AwazonDB', 1, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains('products')) {
-          //create "table"
-          const objectStore = db.createObjectStore('products', {
-            keyPath: 'id',
-            autoIncrement: true,
-          });
-
-          //create index
-          objectStore.createIndex('category', 'category', { unique: false });
-          objectStore.createIndex('title', 'title', { unique: false });
-        }
-
-        if (!db.objectStoreNames.contains('cartList')) {
-          //create "table"
-          db.createObjectStore('cartList', { autoIncrement: true });
-        }
-      },
-    });
-  }
 
   private async getData() {
     const db = await this._indexedDB;
@@ -86,7 +63,12 @@ export class ProductIDBStore extends StoreService {
   }
 
   public override async search(text?: string | undefined) {
-    //  const db =await this.
+    const db = await this._indexedDB;
+    let products: Product[] = await db.getAll('products');
+
+    if (text) products = products.filter(({ title }) => title.includes(text));
+
+    this._products.next(products);
   }
 
   public override async filterByCategories(category?: string | undefined) {
