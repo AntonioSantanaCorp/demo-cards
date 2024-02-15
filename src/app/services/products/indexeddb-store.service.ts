@@ -30,7 +30,7 @@ export class ProductIDBStore extends StoreService {
   private async getData() {
     const db = await this._indexedDB;
 
-    if (await db.count('products')) return db.getAll('products', null, 10);
+    if (await db.count('products')) return db.getAll('products', null);
     else {
       const products = await lastValueFrom(this._getData$);
       const tx = db.transaction('products', 'readwrite');

@@ -11,11 +11,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { Product } from '../../core/models';
 import { CurrencyPipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-card-shop',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatChipsModule, CurrencyPipe],
+  imports: [
+    MatCardModule,
+    MatIconModule,
+    MatButtonModule,
+    MatChipsModule,
+    CurrencyPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'shop-card',
@@ -36,20 +43,20 @@ import { CurrencyPipe } from '@angular/common';
         }
       </div>
     </section>
-    <section class="shop-card__info">
-      <h3>{{ product?.title }}</h3>
-      <p>{{ product?.description }}</p>
-
+    <section class="shop-card__info ">
+      <h3 class="shop-card__info__title">{{ product?.title }}</h3>
+      <div class="shop-card__info__description">
+        <span>{{ product?.description }}</span>
+        <span class="shop-card__info__category"> {{ product?.category }} </span>
+      </div>
       <div class="shop-card__info__footer">
-        <span style="font-size: 1rem;" class="mat-body-strong">
-          {{ product?.price | currency }}
-        </span>
+        <span class="mat-body-strong">{{ product?.price | currency }}</span>
         <button
-          mat-raised-button
+          mat-mini-fab
           color="primary"
           (click)="buyProduct.emit(product!)"
         >
-          Buy
+          <mat-icon>shopping_bag</mat-icon>
         </button>
       </div>
     </section>`,
@@ -97,3 +104,7 @@ export class CardShopComponent implements OnInit {
 //         </button>
 //       </mat-card-actions>
 //     </mat-card>
+
+// <div style="display:flex;flex-direction:column;">
+// <!-- <mat-chip style="width: fit-content;">{{ product?.category }}</mat-chip> -->
+// </div>
