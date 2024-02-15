@@ -82,29 +82,3 @@ export class CardShopComponent implements OnInit {
     this.selectImgView = this.images[index] ?? '';
   }
 }
-// <mat-card style="height: 100%;display:grid;gap:5px">
-//       <mat-card-header>
-//         <mat-card-title>{{ product?.title }}</mat-card-title>
-//       </mat-card-header>
-//       <mat-card-content>
-//         <app-slide-images [images]="this.product?.images ?? []" />
-
-//         <p>{{ product?.description }}</p>
-//         <mat-chip color="primary"> {{ product?.category }}</mat-chip>
-//         <p>Rating: {{ product?.rating?.rate }}</p>
-//         <p>Price: {{ product?.price | currency }}</p>
-//       </mat-card-content>
-//       <mat-card-actions align="end">
-//         <button
-//           mat-raised-button
-//           color="primary"
-//           (click)="buyProduct.emit(product!)"
-//         >
-//           Buy
-//         </button>
-//       </mat-card-actions>
-//     </mat-card>
-
-// <div style="display:flex;flex-direction:column;">
-// <!-- <mat-chip style="width: fit-content;">{{ product?.category }}</mat-chip> -->
-// </div>
