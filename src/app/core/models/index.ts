@@ -5,6 +5,11 @@ export type ProductRating = {
   count: number;
 };
 
+export type CartListResume = {
+  product: Product;
+  amount: number;
+};
+
 export type Product = {
   id: string;
   title: string;

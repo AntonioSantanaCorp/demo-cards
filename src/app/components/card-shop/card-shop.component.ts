@@ -27,7 +27,8 @@ import { MatIconModule } from '@angular/material/icon';
   host: {
     class: 'shop-card',
   },
-  template: ` <section class="shop-card__images">
+  template: `
+    <section class="shop-card__images">
       <img
         class="shop-card__images__view"
         [src]="selectImgView"
@@ -59,7 +60,8 @@ import { MatIconModule } from '@angular/material/icon';
           <mat-icon>shopping_bag</mat-icon>
         </button>
       </div>
-    </section>`,
+    </section>
+  `,
 })
 export class CardShopComponent implements OnInit {
   @Output()
