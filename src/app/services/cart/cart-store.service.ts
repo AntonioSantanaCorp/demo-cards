@@ -41,7 +41,6 @@ export class CartStoreService {
   }
 
   public async removeCart(id: string) {
-    debugger
     const db = await this._indexedDB;
     const deleteIds = await db.getAllKeysFromIndex('cartList', 'id', id);
     const tx = db.transaction('cartList', 'readwrite');
